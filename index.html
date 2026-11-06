@@ -538,7 +538,7 @@ LISENSI DAN SERTIFIKASI
                 
                 if (apiKey === "MASUKKAN_API_KEY_ANDA_DISINI") throw new Error("API Key belum diisi di dalam kode HTML!");
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ role: "user", parts: [
                         { text: "Ekstrak informasi lowongan kerja dari gambar ini secara VERBATIM ke format JSON. Key: companyName, position, keywords, jobDescription." },
@@ -580,7 +580,7 @@ LISENSI DAN SERTIFIKASI
 
                 if (apiKey === "MASUKKAN_API_KEY_ANDA_DISINI") throw new Error("API Key belum diisi!");
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ role: "user", parts: [{ text: `Ubah teks lowongan mentah ini ke format JSON (companyName, position, keywords, jobDescription): "${textInput}"` }] }],
                     generationConfig: { responseMimeType: "application/json" }
@@ -621,7 +621,7 @@ LISENSI DAN SERTIFIKASI
 
                 if (apiKey === "MASUKKAN_API_KEY_ANDA_DISINI") throw new Error("API Key belum diisi di kode HTML!");
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
                 const systemPrompt = `Anda adalah "AI CV REVIEWER – 7 PANEL RECRUITMENT SIMULATOR" industri manufaktur.
 Tugas Anda mengevaluasi CV secara kritis.
