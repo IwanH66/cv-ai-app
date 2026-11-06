@@ -485,6 +485,42 @@ LISENSI DAN SERTIFIKASI
             }
         }
 
+        // =======================================================
+        // UI FEEDBACK UNTUK UPLOAD & PASTE GAMBAR
+        // =======================================================
+        const imageUploadInput = document.getElementById('jd-image-upload');
+        const imagePreviewText = document.getElementById('image-preview-text');
+
+        // Deteksi saat file dipilih lewat klik (Browser Dialog)
+        imageUploadInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                imagePreviewText.innerHTML = `<span class="text-emerald-600 font-bold">✅ Terpilih: ${e.target.files[0].name}</span>`;
+            } else {
+                imagePreviewText.innerText = "Format: JPG, PNG";
+            }
+        });
+
+        // Deteksi saat User menekan Ctrl+V (Paste) di halaman web
+        document.addEventListener('paste', (e) => {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let index in items) {
+                const item = items[index];
+                if (item.kind === 'file' && item.type.startsWith('image/')) {
+                    const blob = item.getAsFile();
+                    
+                    // Masukkan file hasil paste ke dalam input file yang tersembunyi
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(blob);
+                    imageUploadInput.files = dataTransfer.files;
+                    
+                    // Picu event change agar teks indikator hijau muncul
+                    imageUploadInput.dispatchEvent(new Event('change'));
+                    showToast("Gambar berhasil di-paste!", "success");
+                    break; 
+                }
+            }
+        });
+
         // 1. FITUR SCAN GAMBAR LOWONGAN (OCR)
         document.getElementById('btn-scan-image').addEventListener('click', async () => {
             const fileInput = document.getElementById('jd-image-upload');
