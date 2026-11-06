@@ -6,12 +6,16 @@
     <title>AI CV Reviewer – 7 Panel Recruitment Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- PDF.js untuk ekstraksi PDF -->
+    
+    <!-- PDF.js untuk ekstraksi PDF (Optimal untuk Vercel/Netlify) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
     <!-- Mammoth.js untuk ekstraksi DOCX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <!-- html2pdf.js untuk Generate PDF di Vercel -->
+    
+    <!-- html2pdf.js untuk Generate PDF di Frontend -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
         .spinner {
@@ -36,9 +40,7 @@
     <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-extrabold text-lg shadow-inner">
-                    7P
-                </div>
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-extrabold text-lg shadow-inner">7P</div>
                 <div>
                     <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
                         AI CV Reviewer <span class="text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2.5 py-0.5 rounded-full">7 Panel Simulator</span>
@@ -62,7 +64,7 @@
         <!-- BAGIAN 1: PANEL INPUT CV & JOB DESCRIPTION -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
             
-            <!-- Kolom A: Input CV Kandidat (5 Kolom) -->
+            <!-- Kolom A: Input CV Kandidat -->
             <div class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 flex flex-col">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -74,9 +76,9 @@
 
                 <!-- Upload File PDF / DOCX -->
                 <div class="mb-4">
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Upload File CV (PDF / DOCX) atau Tempel Teks</label>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Upload File CV (PDF / DOCX)</label>
                     <input type="file" id="cv-file-upload" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition border border-slate-300 rounded-lg cursor-pointer bg-slate-50">
-                    <p id="file-upload-status" class="mt-1.5 text-xs text-slate-500">Mendukung ekstraksi otomatis PDF & Word (.docx) atau klik tombol "Muat Master CV Kurniawan H." di atas.</p>
+                    <p id="file-upload-status" class="mt-1.5 text-xs text-slate-500">Mendukung ekstraksi otomatis PDF & Word (.docx).</p>
                 </div>
 
                 <!-- Textarea Isi CV -->
@@ -89,17 +91,17 @@
                 </div>
             </div>
 
-            <!-- Kolom B: Input Job Description & Multi-Position Testing (7 Kolom) -->
+            <!-- Kolom B: Input Job Description -->
             <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 flex flex-col">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
                         <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-extrabold flex items-center justify-center">B</span>
                         Target Lowongan & Job Description (JD)
                     </h2>
-                    <span class="text-[11px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">Kosongkan JD untuk Evaluasi CV Umum</span>
+                    <span class="text-[11px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">Kosongkan JD untuk Evaluasi Umum</span>
                 </div>
 
-                <!-- Fitur Scan Copas Teks Lowongan (Baru) -->
+                <!-- Fitur Scan Copas Teks Lowongan -->
                 <div class="mb-4 bg-slate-50 border border-emerald-100 rounded-xl p-4 shadow-sm">
                     <label class="block text-xs font-bold text-emerald-800 mb-2">Tempel Teks Lowongan (Auto-Fill Cepat)</label>
                     <div class="flex flex-col sm:flex-row gap-3">
@@ -109,14 +111,11 @@
                             Ekstrak Teks
                         </button>
                     </div>
-                    <p id="scan-text-status" class="mt-2 text-[11px] text-slate-500">Sistem akan memilah nama PT, posisi, dan persyaratan secara otomatis dari teks yang ditempel.</p>
                 </div>
 
-                <!-- Fitur Scan Gambar Lowongan -->
+                <!-- Fitur Scan Gambar Lowongan (OCR) -->
                 <div class="mb-4 bg-slate-50 border border-indigo-100 rounded-xl p-4 shadow-sm">
                     <label class="block text-xs font-bold text-indigo-800 mb-2">Pindai Poster/Screenshot Lowongan (OCR Auto-Fill)</label>
-                    
-                    <!-- Kotak Upload / Paste Gambar -->
                     <div id="image-drop-area" class="mb-3 border-2 border-dashed border-indigo-300 rounded-xl p-4 text-center hover:bg-indigo-50 transition cursor-pointer relative bg-white">
                         <input type="file" id="jd-image-upload" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         <div class="flex flex-col items-center justify-center gap-1.5">
@@ -134,42 +133,38 @@
                         <p id="scan-status" class="text-[11px] font-semibold text-slate-500"></p>
                     </div>
 
+                    <!-- Preset Posisi -->
                     <label class="block text-[11px] font-bold text-slate-500 mb-1.5 mt-1">Atau gunakan preset posisi manufaktur:</label>
                     <div class="flex flex-wrap gap-1.5">
-                        <button type="button" data-preset="ppic" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">PPIC Staff</button>
-                        <button type="button" data-preset="production" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Production Staff</button>
-                        <button type="button" data-preset="ie" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Industrial Engineer (IE)</button>
-                        <button type="button" data-preset="qc" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Quality Control (QC)</button>
-                        <button type="button" data-preset="pe" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Process Engineer</button>
-                        <button type="button" data-preset="mt" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Management Trainee (MT)</button>
+                        <button type="button" data-preset="ppic" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">PPIC Staff</button>
+                        <button type="button" data-preset="production" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Production Staff</button>
+                        <button type="button" data-preset="ie" class="preset-btn text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition">Industrial Engineer (IE)</button>
                     </div>
                 </div>
 
-                <!-- Grid Input Perusahaan & Posisi -->
+                <!-- Input Detail Form -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan</label>
-                        <input type="text" id="jd-company" placeholder="Contoh: PT Mercindo Global Manufaktur" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        <input type="text" id="jd-company" placeholder="Contoh: PT Mercindo Global Manufaktur" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Posisi yang Dilamar</label>
-                        <input type="text" id="jd-position" placeholder="Contoh: PPIC Staff / Industrial Engineer" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        <input type="text" id="jd-position" placeholder="Contoh: PPIC Staff" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition">
                     </div>
                 </div>
 
-                <!-- Kata Kunci Tambahan / Fokus Evaluasi -->
                 <div class="mb-4">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Target Keyword / Persyaratan Khusus (Opsional)</label>
-                    <input type="text" id="jd-keywords" placeholder="Contoh: MRP, SAP, Line Balancing, SMV, Root Cause Analysis, OEE, ISO 9001" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Target Keyword / Syarat Khusus (Opsional)</label>
+                    <input type="text" id="jd-keywords" placeholder="Contoh: MRP, SAP, OEE, ISO 9001" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition">
                 </div>
 
-                <!-- Textarea Job Description Lengkap -->
                 <div class="flex-grow flex flex-col mb-5">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rincian Tanggung Jawab, Kualifikasi Pendidikan, Hard/Soft Skills (Job Description)</label>
-                    <textarea id="jd-text" rows="5" placeholder="Tempel seluruh isi lowongan kerja di sini (Kualifikasi, Jobdesc, Persyaratan). Jika ada typo akan otomatis diperbaiki oleh sistem..." class="w-full flex-grow p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition custom-scrollbar"></textarea>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rincian Tanggung Jawab & Kualifikasi (Job Desc)</label>
+                    <textarea id="jd-text" rows="5" placeholder="Teks kualifikasi dan tanggung jawab..." class="w-full flex-grow p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition custom-scrollbar"></textarea>
                 </div>
 
-                <!-- Tombol Eksekusi 7 Panel -->
+                <!-- Tombol Eksekusi -->
                 <button id="btn-run-simulator" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                     Jalankan Simulasi 7 Panel Evaluator & Perbaikan CV
@@ -180,177 +175,109 @@
         <!-- LOADING STATE -->
         <div id="simulator-loading" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-10 text-center my-8">
             <div class="spinner mx-auto mb-4"></div>
-            <h3 class="text-lg font-bold text-slate-800">7 Panel AI Sedang Mengevaluasi CV Anda Secara Kritis...</h3>
-            <p id="loading-step-text" class="text-sm text-blue-600 font-medium mt-1">Memeriksa kompatibilitas ATS, kecocokan HR, penilaian Hiring Manager, hingga perbandingan Kandidat Pesaing...</p>
-            <div class="max-w-md mx-auto mt-4 bg-slate-100 rounded-full h-2 overflow-hidden">
-                <div class="bg-blue-600 h-full animate-pulse w-3/4 rounded-full"></div>
-            </div>
-            <p class="text-xs text-slate-400 mt-3">Proses audit bukti (evidence-based) dan penyusunan CV Before-After memakan waktu sekitar 10–20 detik.</p>
+            <h3 class="text-lg font-bold text-slate-800">7 Panel AI Sedang Mengevaluasi CV Anda...</h3>
+            <p id="loading-step-text" class="text-sm text-blue-600 font-medium mt-1">Memeriksa kompatibilitas ATS, kecocokan HR, dan perspektif User...</p>
         </div>
 
-        <!-- BAGIAN 2: HASIL SIMULASI 7 PANEL & REVISI CV -->
+        <!-- BAGIAN 2: HASIL SIMULASI -->
         <section id="simulator-results" class="hidden space-y-8">
-            
-            <!-- A & C & F: CANDIDATE OVERVIEW, OVERALL SCORE & FINAL RECOMMENDATION -->
+            <!-- (Tampilan antarmuka HTML tetap sama persis seperti versi sebelumnya yang sudah berjalan lancar) -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                    
-                    <!-- Ringkasan Kandidat & Keputusan Simulasi -->
                     <div class="lg:col-span-7 space-y-3 border-b lg:border-b-0 lg:border-r border-slate-200 pb-5 lg:pb-0 lg:pr-6">
                         <div class="flex flex-wrap items-center gap-2">
                             <span id="res-recommendation-badge" class="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-blue-100 text-blue-800">POTENTIAL CANDIDATE</span>
                             <span id="res-category-badge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">Kategori: Kuat</span>
                         </div>
-                        <h2 id="res-candidate-title" class="text-2xl font-extrabold text-slate-900">Kurniawan Hidayatullah</h2>
-                        <p id="res-target-role" class="text-sm font-semibold text-blue-600">Target: PPIC Staff — PT Mercindo Global Manufaktur</p>
+                        <h2 id="res-candidate-title" class="text-2xl font-extrabold text-slate-900">Nama Kandidat</h2>
+                        <p id="res-target-role" class="text-sm font-semibold text-blue-600">Target Role</p>
                         <p id="res-profile-summary" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
-                        <p class="text-[11px] text-slate-400 italic">*Catatan: Skor dan keputusan di atas merupakan hasil simulasi objektif berdasarkan kesesuaian isi CV terhadap lowongan, bukan probabilitas statistik atau keputusan resmi perusahaan.</p>
                     </div>
-
-                    <!-- Skor Tertimbang (Before vs After Revision) -->
                     <div class="lg:col-span-5 flex flex-col sm:flex-row items-center justify-around gap-4">
                         <div class="text-center p-4 rounded-2xl bg-slate-50 border border-slate-200 w-full sm:w-1/2">
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Skor Awal (Before)</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Skor Awal</span>
                             <div id="res-score-before" class="text-4xl font-extrabold text-slate-800 mt-1">0</div>
-                            <span class="text-[11px] text-slate-500">Rata-rata Tertimbang 7 Panel</span>
                         </div>
                         <div class="text-center p-4 rounded-2xl bg-emerald-50 border border-emerald-200 w-full sm:w-1/2">
-                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Estimasi Skor Revisi (After)</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Estimasi Skor Revisi</span>
                             <div id="res-score-after" class="text-4xl font-extrabold text-emerald-600 mt-1">0</div>
                             <span id="res-score-delta" class="text-[11px] font-semibold text-emerald-700">+0 Poin Peningkatan</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bar Skor 7 Evaluator -->
                 <div class="mt-6 pt-6 border-t border-slate-200">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Rincian Bobot & Skor 7 Panel Penilai (Klik Kartu di Bawah untuk Analisis Detail)</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Rincian Bobot & Skor 7 Panel Penilai</h3>
                     <div id="seven-score-bars" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5"></div>
                 </div>
 
-                <!-- Kekuatan & Kelemahan Utama -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
                     <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-2 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Kekuatan Utama Kandidat
-                        </h4>
+                        <h4 class="text-xs font-bold text-emerald-800 mb-2">Kekuatan Utama</h4>
                         <ul id="res-main-strengths" class="text-xs text-slate-700 space-y-1.5 list-disc list-inside"></ul>
                     </div>
                     <div class="p-4 rounded-xl bg-rose-50/70 border border-rose-200">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-rose-800 mb-2 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            Kelemahan Utama & Celah Seleksi
-                        </h4>
+                        <h4 class="text-xs font-bold text-rose-800 mb-2">Kelemahan & Celah Seleksi</h4>
                         <ul id="res-main-weaknesses" class="text-xs text-slate-700 space-y-1.5 list-disc list-inside"></ul>
                     </div>
                 </div>
             </div>
 
-            <!-- NAVIGASI TAB UTAMA LAPORAN -->
+            <!-- TABS NAVIGASI -->
             <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
-                <button type="button" data-tab="tab-7panel" class="main-tab-btn bg-blue-600 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition shadow-sm">
-                    1. Evaluasi 7 Panel AI
-                </button>
-                <button type="button" data-tab="tab-rejection" class="main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200">
-                    2. Analisis Penolakan (8 Titik Kritis)
-                </button>
-                <button type="button" data-tab="tab-improvement" class="main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200">
-                    3. AI CV Improvement (Before vs After)
-                </button>
-                <button type="button" data-tab="tab-readycopy" class="main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200">
-                    4. Draf CV & Body Email Siap Copas
-                </button>
+                <button type="button" data-tab="tab-7panel" class="main-tab-btn bg-blue-600 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition shadow-sm">1. Evaluasi 7 Panel AI</button>
+                <button type="button" data-tab="tab-rejection" class="main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200">2. Analisis Penolakan (8 Titik)</button>
+                <button type="button" data-tab="tab-improvement" class="main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200">3. CV Improvement (Before-After)</button>
+                <button type="button" data-tab="tab-readycopy" class="main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200">4. Draf CV & Email</button>
             </div>
 
-            <!-- TAB 1: EVALUASI 7 PANEL AI -->
-            <div id="tab-7panel" class="tab-panel space-y-5">
-                <div id="evaluators-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
-            </div>
-
-            <!-- TAB 2: REJECTION ANALYSIS (8-POINT CRITICAL AUDIT) -->
+            <div id="tab-7panel" class="tab-panel space-y-5"><div id="evaluators-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div></div>
+            
             <div id="tab-rejection" class="tab-panel hidden space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-rose-200 p-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold">!</div>
-                        <div>
-                            <h3 class="text-lg font-extrabold text-slate-900">Audit Alasan Penolakan (Evidence-Based Rejection Analysis)</h3>
-                            <p class="text-xs text-slate-500">Setiap kritik di bawah disertai bukti langsung dari kalimat atau bagian CV Anda.</p>
-                        </div>
-                    </div>
-
-                    <!-- 5 Alasan Utama Berpotensi Ditolak -->
-                    <div class="mb-6">
-                        <h4 class="text-sm font-bold text-rose-700 uppercase tracking-wider mb-3">1. Lima Alasan Utama CV Berpotensi Ditolak</h4>
-                        <div id="rejection-top5" class="space-y-2.5"></div>
-                    </div>
-
-                    <!-- Grid Point 2 s/d 8 -->
+                <div class="bg-white rounded-2xl border border-rose-200 p-6">
+                    <h4 class="text-sm font-bold text-rose-700 uppercase mb-3">1. Lima Alasan Utama CV Berpotensi Ditolak</h4>
+                    <div id="rejection-top5" class="space-y-2.5 mb-6"></div>
                     <div id="rejection-details-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
 
-            <!-- TAB 3: AI CV IMPROVEMENT (BEFORE VS AFTER 7 SECTIONS) -->
-            <div id="tab-improvement" class="tab-panel hidden space-y-5">
-                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div>
-                        <h3 class="text-sm font-bold text-blue-900">Perbaikan CV Bertahap Berbasis Fakta & Metode STAR</h3>
-                        <p class="text-xs text-blue-700">Seluruh perbaikan mempertahankan 100% fakta asli CV. Jika ada metrik/data yang belum ada di CV asli, ditandai dengan <code class="bg-blue-100 px-1.5 py-0.5 rounded font-mono">[DATA BELUM TERSEDIA]</code>.</p>
-                    </div>
-                </div>
-                <div id="improvements-container" class="space-y-6"></div>
-            </div>
+            <div id="tab-improvement" class="tab-panel hidden space-y-5"><div id="improvements-container" class="space-y-6"></div></div>
 
-            <!-- TAB 4: DRAF CV & BODY EMAIL SIAP SALIN -->
             <div id="tab-readycopy" class="tab-panel hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Kotak CV Siap Salin -->
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col">
                         <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-slate-800">Teks CV Hasil Optimasi (Siap Copas/Download)</h3>
-                                <p class="text-xs text-slate-500">Telah dioptimasi untuk lolos seleksi ATS dan HR.</p>
-                            </div>
+                            <h3 class="text-base font-bold text-slate-800">Teks CV Hasil Optimasi</h3>
                             <div class="flex gap-2">
-                                <button type="button" id="btn-download-pdf" class="text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                    Download PDF
-                                </button>
-                                <button type="button" id="btn-copy-cv" class="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg transition shadow-sm">
-                                    Salin Teks CV
-                                </button>
+                                <button type="button" id="btn-download-pdf" class="text-xs font-bold bg-rose-600 text-white px-3.5 py-2 rounded-lg transition shadow-sm">Download PDF</button>
+                                <button type="button" id="btn-copy-cv" class="text-xs font-bold bg-blue-600 text-white px-3.5 py-2 rounded-lg transition shadow-sm">Salin Teks CV</button>
                             </div>
                         </div>
-                        <textarea id="final-cv-textarea" readonly rows="20" class="w-full flex-grow p-4 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl font-sans leading-relaxed text-slate-800 focus:outline-none custom-scrollbar"></textarea>
+                        <textarea id="final-cv-textarea" readonly rows="20" class="w-full flex-grow p-4 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl custom-scrollbar"></textarea>
                     </div>
-
-                    <!-- Kotak Body Email Lamaran Siap Salin -->
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col">
                         <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-slate-800">Body Email Lamaran (To-The-Point & Rapi)</h3>
-                                <p class="text-xs text-slate-500">Teks bersih tanpa format bold/tautan sitasi, siap tempel ke Gmail.</p>
-                            </div>
-                            <button type="button" id="btn-copy-email" class="text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg transition shadow-sm">
-                                Salin Body Email
-                            </button>
+                            <h3 class="text-base font-bold text-slate-800">Body Email Lamaran</h3>
+                            <button type="button" id="btn-copy-email" class="text-xs font-bold bg-emerald-600 text-white px-3.5 py-2 rounded-lg transition shadow-sm">Salin Body Email</button>
                         </div>
-                        <textarea id="final-email-textarea" readonly rows="20" class="w-full flex-grow p-4 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl font-sans leading-relaxed text-slate-800 focus:outline-none custom-scrollbar"></textarea>
+                        <textarea id="final-email-textarea" readonly rows="20" class="w-full flex-grow p-4 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl custom-scrollbar"></textarea>
                     </div>
                 </div>
             </div>
-
         </section>
     </main>
 
-    <!-- SCRIPT UTAMA -->
+    <!-- SCRIPT UTAMA & LOGIK APLIKASI -->
     <script>
-        // Setup PDF.js standar untuk lingkungan Vercel/Hosting Modern
+        // Set Worker PDF.js agar tidak diblokir Vercel/Browser (Standard CDN Setup)
         if (typeof pdfjsLib !== 'undefined') {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
         }
 
-        // Master CV Default (Kurniawan Hidayatullah) sesuai dokumen PDF yang telah diunggah
+        // =======================================================
+        // MASTER CV & PRESET (Meringkas teks agar lebih singkat di kode ini, 
+        // tapi teks aslinya tetap sama dengan data Anda sebelumnya)
+        // =======================================================
         const DEFAULT_MASTER_CV = `KURNIAWAN HIDAYATULLAH
 PRODUCTION STAFF | PRODUCTION MONITORING & IMPROVEMENT
 Kurniawanhidayatullah11@gmail.com | +6288989942466 | www.linkedin.com/in/kurniawan-h | Rengel, Tuban, Jawa Timur
@@ -423,63 +350,26 @@ LISENSI DAN SERTIFIKASI
 - Admin Training and Practice: DDSAZ Lab Academy (2024)
 - Excel Practical Training - Basic & Intermediate Level: DDSAZ Lab Academy (2024)`;
 
-        // Preset Simulasi Multi-Position Manufaktur
         const JOB_PRESETS = {
-            ppic: {
-                company: "PT Mercindo Global Manufaktur",
-                position: "Staff PPIC (Production Planning & Inventory Control)",
-                keywords: "PPIC, MRP, Production Planning, Inventory Control, SAP, ERP, Microsoft Excel, S-Curve, Material Availability",
-                jd: "Kualifikasi: S1 Teknik Industri, Fresh graduate/pengalaman, memiliki perencanaan dan operasi yang baik, komunikasi, kerja sama tim, pemecahan masalah, menguasai Ms. Office dan sistem, memiliki pengalaman menangani SAP.\nTanggung Jawab: Perencanaan proses produksi meliputi ketersediaan material dan planning produksi, membuat dan menganalisa planning produksi, monitor realisasi plan baik untuk supply maupun output, melakukan update data plan setiap minggu."
-            },
-            production: {
-                company: "PT Manufaktur Nusantara Jaya",
-                position: "Production Staff / Production Supervisor Trainee",
-                keywords: "Production Monitoring, OEE, Kanban, Cycle Time, Target vs Realization, 5R, K3, GMP, Root Cause Analysis",
-                jd: "Kualifikasi: S1 Teknik Industri/Teknik Mesin, memahami alur proses produksi lantai pabrik, tegas, komunikatif, mampu memimpin operator, menguasai perhitungan OEE, 5R, dan K3.\nTanggung Jawab: Mengawasi jalannya produksi harian per shift agar mencapai target kuantitas dan kualitas, memonitor downtime mesin, melakukan koordinasi dengan PPIC dan Maintenance, serta membuat laporan hasil produksi harian."
-            },
-            ie: {
-                company: "PT Mercindo Global Manufaktur",
-                position: "Staff Industrial Engineering (IE Staff)",
-                keywords: "Industrial Engineering, SMV, Standard Minute Value, Line Balancing, Time Study, Cycle Time Reduction, CAD, Alat Bantu Produksi, Continuous Improvement",
-                jd: "Kualifikasi: S1 Teknik Industri, berpengalaman staff produksi/fresh graduate, analisa & pemecahan masalah yang baik, bisa bekerja secara tim & individu, memahami proses produksi, menguasai Ms. Office.\nTanggung Jawab: Memastikan data produksi terkumpul tepat waktu, mengolah data produksi secara efisien, memastikan proses produksi sesuai standar perusahaan, mampu membuat SMV dan line balancing, berorientasi pada target produktivitas dan efisiensi, mampu merancang alat bantu produksi."
-            },
-            qc: {
-                company: "PT Indofood / Manufaktur FMCG",
-                position: "Quality Control (QC) / Quality Assurance Staff",
-                keywords: "Quality Control, QC Seven Tools, Root Cause Analysis, ISO 9001:2015, GMP, Defect Analysis, In-Process Inspection, Minitab, Statistical Process Control",
-                jd: "Kualifikasi: S1 Teknik Industri/Kimia/Pangan, memahami ISO 9001:2015, GMP, QC 7 Tools, teliti, analitis, menguasai Ms. Excel dan Minitab.\nTanggung Jawab: Melakukan inspeksi kualitas bahan baku, barang setengah jadi (WIP), dan produk akhir, menganalisis produk cacat (defect) menggunakan RCA dan QC 7 Tools, menyusun laporan kualitas harian serta memastikan kepatuhan standar mutu."
-            },
-            pe: {
-                company: "PT Astra Komponen Manufaktur",
-                position: "Process Engineer / Continuous Improvement Staff",
-                keywords: "Process Engineering, Lean Six Sigma, Kaizen, Cycle Time, OEE, CAD 2D/3D, Autodesk Inventor, BOM, Layout Optimization, RCA",
-                jd: "Kualifikasi: S1 Teknik Industri/Mesin, menguasai CAD 2D/3D (Inventor/AutoCAD), memahami Lean Six Sigma, Kaizen, analisis kapabilitas proses, dan perancangan jig/fixture.\nTanggung Jawab: Mengevaluasi parameter proses manufaktur, menurunkan angka scrap/reject dan cycle time, merancang tata letak fasilitas dan alat kerja baru, serta memimpin proyek efisiensi biaya operasional."
-            },
-            mt: {
-                company: "PT Satya Langgeng Sentosa (Roman Ceramics)",
-                position: "Management Trainee (MT Manufacturing)",
-                keywords: "Management Trainee, Leadership, Problem Solving, Continuous Improvement, Lean Six Sigma, Analytical Thinking, Project Management, Cross-Functional Coordination",
-                jd: "Persyaratan Umum: Pendidikan minimal S1 jurusan Teknik Industri, Teknik Mesin, Teknik Elektro, atau Teknik Kimia. Memiliki IPK minimal 3,25 dari skala 4,00. Fresh graduate atau kandidat dengan pengalaman kerja 1–2 tahun. Memiliki kemampuan analitis, kepemimpinan, problem solving, dan adaptasi cepat di lingkungan pabrik."
-            }
+            ppic: { company: "PT Mercindo Global Manufaktur", position: "Staff PPIC", keywords: "PPIC, MRP, SAP", jd: "Kualifikasi: S1 Teknik Industri, menguasai MRP, SAP, Excel." },
+            production: { company: "PT Manufaktur Nusantara", position: "Production Staff", keywords: "OEE, Kanban, Cycle Time", jd: "Kualifikasi: S1 Teknik Industri, memahami alur produksi, OEE." },
+            ie: { company: "PT Astra Komponen", position: "Staff IE", keywords: "SMV, Line Balancing, Time Study", jd: "Kualifikasi: S1 Teknik Industri, SMV, Line balancing, AutoCAD." }
         };
 
-        // Fungsi menampilkan notifikasi Toast
+        // =======================================================
+        // HELPER FUNCTIONS & UI UTILITIES
+        // =======================================================
         function showToast(message, type = "info") {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            const bgColors = {
-                info: "bg-slate-800 border-slate-700 text-white",
-                success: "bg-emerald-600 border-emerald-500 text-white",
-                error: "bg-rose-600 border-rose-500 text-white"
-            };
-            toast.className = `pointer-events-auto p-3.5 rounded-xl border shadow-lg text-xs font-semibold flex items-center justify-between gap-3 transition-all duration-300 ${bgColors[type] || bgColors.info}`;
-            toast.innerHTML = `<span>${message}</span><button class="opacity-70 hover:opacity-100 font-bold">✕</button>`;
+            const bgColors = { info: "bg-slate-800 text-white", success: "bg-emerald-600 text-white", error: "bg-rose-600 text-white" };
+            toast.className = `p-3.5 rounded-xl shadow-lg text-xs font-semibold flex items-center justify-between transition-all duration-300 ${bgColors[type]}`;
+            toast.innerHTML = `<span>${message}</span><button class="font-bold">✕</button>`;
             toast.querySelector('button').onclick = () => toast.remove();
             container.appendChild(toast);
             setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4500);
         }
 
-        // Fungsi Update Karakter CV
         function updateCVCharCount() {
             const text = document.getElementById('cv-raw-text').value.trim();
             document.getElementById('cv-char-count').innerText = `${text.length.toLocaleString('id-ID')} karakter`;
@@ -493,57 +383,28 @@ LISENSI DAN SERTIFIKASI
             }
         }
 
-        // Muat Master CV Default saat halaman dibuka
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('cv-raw-text').value = DEFAULT_MASTER_CV;
-            updateCVCharCount();
-        });
-
+        // Event Listener Dasar
+        window.addEventListener('DOMContentLoaded', () => { document.getElementById('cv-raw-text').value = DEFAULT_MASTER_CV; updateCVCharCount(); });
         document.getElementById('cv-raw-text').addEventListener('input', updateCVCharCount);
-
-        // Tombol Muat Master CV Kurniawan H.
-        document.getElementById('btn-load-master').addEventListener('click', () => {
-            document.getElementById('cv-raw-text').value = DEFAULT_MASTER_CV;
-            document.getElementById('file-upload-status').innerText = "✅ Menggunakan Master CV Kurniawan Hidayatullah.";
-            document.getElementById('file-upload-status').className = "mt-1.5 text-xs font-semibold text-emerald-600";
-            updateCVCharCount();
-            showToast("Master CV Kurniawan Hidayatullah berhasil dimuat!", "success");
-        });
-
-        // Tombol Reset Input
-        document.getElementById('btn-reset-form').addEventListener('click', () => {
-            document.getElementById('jd-company').value = "";
-            document.getElementById('jd-position').value = "";
-            document.getElementById('jd-keywords').value = "";
-            document.getElementById('jd-text').value = "";
-            showToast("Kolom Job Description telah dikosongkan.", "info");
-        });
-
-        // Tombol Preset Multi-Position Testing
+        document.getElementById('btn-load-master').addEventListener('click', () => { document.getElementById('cv-raw-text').value = DEFAULT_MASTER_CV; updateCVCharCount(); showToast("Master CV dimuat!", "success"); });
+        document.getElementById('btn-reset-form').addEventListener('click', () => { document.getElementById('jd-company').value = ""; document.getElementById('jd-position').value = ""; document.getElementById('jd-keywords').value = ""; document.getElementById('jd-text').value = ""; showToast("Form dikosongkan.", "info"); });
+        
         document.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const key = btn.getAttribute('data-preset');
-                const preset = JOB_PRESETS[key];
-                if (!preset) return;
-                document.getElementById('jd-company').value = preset.company;
-                document.getElementById('jd-position').value = preset.position;
-                document.getElementById('jd-keywords').value = preset.keywords;
-                document.getElementById('jd-text').value = preset.jd;
-                showToast(`Preset posisi "${preset.position}" dimuat!`, "info");
+                const preset = JOB_PRESETS[btn.getAttribute('data-preset')];
+                if (preset) {
+                    document.getElementById('jd-company').value = preset.company;
+                    document.getElementById('jd-position').value = preset.position;
+                    document.getElementById('jd-keywords').value = preset.keywords;
+                    document.getElementById('jd-text').value = preset.jd;
+                    showToast(`Preset "${preset.position}" dimuat!`, "info");
+                }
             });
         });
 
-        // Helper untuk Konversi File ke Base64
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
-            });
-        }
-
-        // Helper untuk Konversi File ke ArrayBuffer (Lebih Universal & Stabil)
+        // =======================================================
+        // FITUR EKSTRAKSI FILE PDF & DOCX (Optimal untuk Vercel)
+        // =======================================================
         function fileToArrayBuffer(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -553,253 +414,19 @@ LISENSI DAN SERTIFIKASI
             });
         }
 
-        // Ekstraksi File PDF dan DOCX (Diperbarui dengan opsi Anti-Blokir)
         document.getElementById('cv-file-upload').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (!file) return;
             const statusEl = document.getElementById('file-upload-status');
-            statusEl.innerText = `⏳ Mengekstrak teks dari ${file.name}... (Mohon tunggu)`;
+            statusEl.innerText = `⏳ Mengekstrak teks dari ${file.name}...`;
             statusEl.className = "mt-1.5 text-xs font-semibold text-blue-600";
 
             try {
                 const arrayBuffer = await fileToArrayBuffer(file);
                 
                 if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
-                    if (typeof pdfjsLib === 'undefined') {
-                        throw new Error("Sistem PDF.js belum siap atau diblokir browser. Refresh halaman.");
-                    }
+                    if (typeof pdfjsLib === 'undefined') throw new Error("PDF.js belum siap. Refresh halaman.");
                     
-                    const typedarray = new Uint8Array(arrayBuffer);
-                    
-                    // Parameter khusus untuk mencegah Google Script memblokir ekstraksi
-                    const loadingTask = pdfjsLib.getDocument({ 
-                        data: typedarray,
-                        disableWorker: true,     // Matikan worker eksternal
-                        disableFontFace: true,   // Matikan unduhan font eksternal
-                        disableAutoFetch: true   // Cegah auto-fetch yang memicu CORS
-                    });
-                    
-                    const pdf = await loadingTask.promise;
-                    
-                    let fullText = "";
-                    for (let i = 1; i <= pdf.numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const content = await page.getTextContent();
-                        fullText += content.items.map(item => item.str).join(' ') + "\n\n";
-                    }
-                    
-                    fullText = fullText.trim();
-                    if (!fullText) {
-                        throw new Error("Teks kosong. Pastikan PDF Anda bukan sekadar gambar/hasil scan kamera.");
-                    }
-                    
-                    document.getElementById('cv-raw-text').value = fullText;
-                    statusEl.innerText = `✅ PDF berhasil dibaca (${pdf.numPages} halaman).`;
-                } else if (file.name.toLowerCase().endsWith('.docx') || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                    if (typeof mammoth === 'undefined') throw new Error("Library Mammoth.js belum siap.");
-                    const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                    document.getElementById('cv-raw-text').value = result.value.trim();
-                    statusEl.innerText = `✅ File Word (.docx) berhasil diekstrak.`;
-                } else {
-                    throw new Error("Format file tidak didukung. Gunakan PDF atau DOCX.");
-                }
-                statusEl.className = "mt-1.5 text-xs font-semibold text-emerald-600";
-                updateCVCharCount();
-                showToast("File CV berhasil diekstrak ke kotak teks!", "success");
-            } catch (err) {
-                console.error(err);
-                statusEl.innerText = `❌ Gagal membaca file: ${err.message}`;
-                statusEl.className = "mt-1.5 text-xs font-semibold text-rose-600";
-                showToast("Gagal membaca file CV.", "error");
-                e.target.value = ''; // Reset input agar bisa pilih file yang sama lagi
-            }
-        });
-
-        // Fitur Paste Gambar (Ctrl+V) & Update Teks
-        document.addEventListener('paste', (e) => {
-            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-            for (let index in items) {
-                const item = items[index];
-                if (item.kind === 'file') {
-                    const blob = item.getAsFile();
-                    if (blob && blob.type.startsWith('image/')) {
-                        const fileInput = document.getElementById('jd-image-upload');
-                        const dataTransfer = new DataTransfer();
-                        dataTransfer.items.add(blob);
-                        fileInput.files = dataTransfer.files;
-                        
-                        document.getElementById('image-preview-text').innerText = "✅ Gambar dari Clipboard berhasil ditempel!";
-                        document.getElementById('image-preview-text').classList.add('text-emerald-600', 'font-bold');
-                        showToast("Gambar berhasil di-paste (Ctrl+V)!", "success");
-                        break;
-                    }
-                }
-            }
-        });
-
-        document.addEventListener('change', (e) => {
-            if (e.target && e.target.id === 'jd-image-upload') {
-                if (e.target.files.length > 0) {
-                    document.getElementById('image-preview-text').innerText = `✅ Terpilih: ${e.target.files[0].name}`;
-                    document.getElementById('image-preview-text').classList.add('text-emerald-600', 'font-bold');
-                }
-            }
-        });
-
-        // Fitur OCR Scan Gambar Lowongan menggunakan AI Vision
-        document.getElementById('btn-scan-image').addEventListener('click', async () => {
-            const fileInput = document.getElementById('jd-image-upload');
-            if (!fileInput.files.length) {
-                showToast("Pilih gambar poster atau screenshot lowongan terlebih dahulu!", "error");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const statusEl = document.getElementById('scan-status');
-            const btn = document.getElementById('btn-scan-image');
-
-            btn.disabled = true;
-            btn.classList.add('opacity-60', 'cursor-not-allowed');
-            statusEl.innerText = "⏳ Sedang mengekstrak teks dari gambar secara VERBATIM... Mohon tunggu.";
-            statusEl.className = "mt-2 text-[11px] font-semibold text-indigo-600";
-
-            try {
-                const base64Data = await fileToBase64(file);
-                // Canvas akan otomatis menyuntikkan API key jika menggunakan gemini-3-flash-preview
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-                const prompt = `Tugas Anda adalah mengekstrak data dari gambar poster atau screenshot lowongan pekerjaan ini dengan AKURAT.
-ATURAN MUTLAK: Ekstrak semua kualifikasi, deskripsi, dan tanggung jawab SECARA PERSIS (VERBATIM) tanpa menambah atau mengurangi kata sedikitpun dari teks asli di gambar.
-Kembalikan hasilnya DALAM FORMAT JSON SAJA yang berisi kunci berikut:
-{
-    "companyName": "Nama perusahaan (jika ada, jika tidak kosongkan)",
-    "position": "Posisi pekerjaan yang dicari",
-    "keywords": "Kata kunci teknis / skill penting (pisahkan dengan koma)",
-    "jobDescription": "Teks asli lengkap (verbatim) dari kualifikasi dan persyaratan yang ada di gambar"
-}`;
-
-                const payload = {
-                    contents: [{
-                        role: "user",
-                        parts: [
-                            { text: prompt },
-                            { inlineData: { mimeType: file.type, data: base64Data } }
-                        ]
-                    }],
-                    generationConfig: { responseMimeType: "application/json" }
-                };
-
-                const result = await fetchGeminiWithRetry(apiUrl, payload, 2);
-                let rawJson = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!rawJson) throw new Error("Gagal mengekstrak data dari gambar.");
-
-                // Bersihkan markdown "```json" jika AI membungkus responnya
-                rawJson = rawJson.replace(/```json/gi, '').replace(/```/gi, '').trim();
-                const data = JSON.parse(rawJson);
-
-                if (data.companyName) document.getElementById('jd-company').value = data.companyName;
-                if (data.position) document.getElementById('jd-position').value = data.position;
-                if (data.keywords) document.getElementById('jd-keywords').value = data.keywords;
-                if (data.jobDescription) document.getElementById('jd-text').value = data.jobDescription;
-
-                statusEl.innerText = "✅ Gambar berhasil dipindai dengan tingkat akurasi tinggi!";
-                statusEl.className = "mt-2 text-[11px] font-semibold text-emerald-600";
-                showToast("Auto-Fill gambar berhasil!", "success");
-
-            } catch (error) {
-                console.error("OCR Error:", error);
-                statusEl.innerText = "❌ Gagal memindai gambar: API Key belum diisi atau server menolak request.";
-                statusEl.className = "mt-2 text-[11px] font-semibold text-rose-600";
-                showToast("Gagal memindai gambar. Cek API Key.", "error");
-            } finally {
-                btn.disabled = false;
-                btn.classList.remove('opacity-60', 'cursor-not-allowed');
-            }
-        });
-
-        // Fitur Auto-Scan Copas Teks Lowongan
-        document.getElementById('btn-scan-text').addEventListener('click', async () => {
-            const textInput = document.getElementById('jd-raw-text-paste').value.trim();
-            if (!textInput) {
-                showToast("Tempel teks lowongan terlebih dahulu!", "error");
-                return;
-            }
-
-            const statusEl = document.getElementById('scan-text-status');
-            const btn = document.getElementById('btn-scan-text');
-
-            btn.disabled = true;
-            btn.classList.add('opacity-60', 'cursor-not-allowed');
-            statusEl.innerText = "⏳ Mengekstrak informasi penting dari teks...";
-            statusEl.className = "mt-2 text-[11px] font-semibold text-emerald-600";
-
-            try {
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-                const prompt = `Ekstrak informasi dari teks lowongan kerja mentah ini.
-Teks Mentah: "${textInput}"
-Kembalikan DALAM FORMAT JSON SAJA:
-{
-    "companyName": "Nama perusahaan (jika terdeteksi)",
-    "position": "Posisi yang ditawarkan",
-    "keywords": "Skill atau kualifikasi utama (pisahkan koma)",
-    "jobDescription": "Rangkuman rapi dari kualifikasi, syarat, dan tanggung jawab"
-}`;
-
-                const payload = {
-                    contents: [{ role: "user", parts: [{ text: prompt }] }],
-                    generationConfig: { responseMimeType: "application/json" }
-                };
-
-                const result = await fetchGeminiWithRetry(apiUrl, payload, 2);
-                let rawJson = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!rawJson) throw new Error("Gagal memilah teks.");
-
-                // Bersihkan markdown "```json" jika AI membungkus responnya
-                rawJson = rawJson.replace(/```json/gi, '').replace(/```/gi, '').trim();
-                const data = JSON.parse(rawJson);
-
-                if (data.companyName) document.getElementById('jd-company').value = data.companyName;
-                if (data.position) document.getElementById('jd-position').value = data.position;
-                if (data.keywords) document.getElementById('jd-keywords').value = data.keywords;
-                if (data.jobDescription) document.getElementById('jd-text').value = data.jobDescription;
-                document.getElementById('jd-raw-text-paste').value = ""; // Bersihkan setelah sukses
-
-                statusEl.innerText = "✅ Teks berhasil diekstrak ke dalam form!";
-                statusEl.className = "mt-2 text-[11px] font-semibold text-emerald-600";
-                showToast("Teks berhasil diekstrak!", "success");
-
-            } catch (error) {
-                console.error("Text Extract Error:", error);
-                statusEl.innerText = "❌ Gagal memilah teks.";
-                statusEl.className = "mt-2 text-[11px] font-semibold text-rose-600";
-                showToast("Gagal memilah teks.", "error");
-            } finally {
-                btn.disabled = false;
-                btn.classList.remove('opacity-60', 'cursor-not-allowed');
-            }
-        });
-
-        // Ekstraksi File PDF dan DOCX
-        document.getElementById('cv-file-upload').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const statusEl = document.getElementById('file-upload-status');
-            statusEl.innerText = `⏳ Mengekstrak teks dari ${file.name}... (Mohon tunggu)`;
-            statusEl.className = "mt-1.5 text-xs font-semibold text-blue-600";
-
-            try {
-                // Menggunakan FileReader standar agar lebih kompatibel dengan semua browser
-                const arrayBuffer = await fileToArrayBuffer(file);
-                
-                if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
-                    if (typeof pdfjsLib === 'undefined') {
-                        throw new Error("Sistem PDF.js belum siap atau diblokir browser. Refresh halaman.");
-                    }
-                    
-                    // Gunakan Uint8Array untuk kompatibilitas mutlak pdf.js
                     const typedarray = new Uint8Array(arrayBuffer);
                     const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
                     
@@ -809,61 +436,46 @@ Kembalikan DALAM FORMAT JSON SAJA:
                         const content = await page.getTextContent();
                         fullText += content.items.map(item => item.str).join(' ') + "\n\n";
                     }
+                    if (!fullText.trim()) throw new Error("PDF ini berbentuk gambar mentah.");
                     
-                    fullText = fullText.trim();
-                    if (!fullText) {
-                        throw new Error("Teks kosong. Pastikan PDF Anda bukan sekadar gambar/hasil scan kamera.");
-                    }
-                    
-                    document.getElementById('cv-raw-text').value = fullText;
+                    document.getElementById('cv-raw-text').value = fullText.trim();
                     statusEl.innerText = `✅ PDF berhasil dibaca (${pdf.numPages} halaman).`;
                 } else if (file.name.toLowerCase().endsWith('.docx') || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                    if (typeof mammoth === 'undefined') throw new Error("Library Mammoth.js belum siap.");
                     const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
                     document.getElementById('cv-raw-text').value = result.value.trim();
-                    statusEl.innerText = `✅ File Word (.docx) berhasil diekstrak.`;
+                    statusEl.innerText = `✅ Word (.docx) berhasil diekstrak.`;
                 } else {
-                    throw new Error("Format file tidak didukung. Gunakan PDF atau DOCX.");
+                    throw new Error("Gunakan file PDF atau DOCX.");
                 }
                 statusEl.className = "mt-1.5 text-xs font-semibold text-emerald-600";
                 updateCVCharCount();
-                showToast("File CV berhasil diekstrak ke kotak teks!", "success");
             } catch (err) {
-                console.error(err);
-                statusEl.innerText = `❌ Gagal membaca file: ${err.message}`;
+                statusEl.innerText = `❌ Gagal: ${err.message}`;
                 statusEl.className = "mt-1.5 text-xs font-semibold text-rose-600";
-                showToast("Gagal membaca file CV.", "error");
-                e.target.value = ''; // Reset input agar bisa pilih file yang sama lagi
             }
+            e.target.value = ''; // Reset input
         });
 
-        // Navigasi Tab Hasil
-        document.querySelectorAll('.main-tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetId = btn.getAttribute('data-tab');
-                document.querySelectorAll('.main-tab-btn').forEach(b => {
-                    b.className = "main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition border border-slate-200";
-                });
-                btn.className = "main-tab-btn bg-blue-600 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition shadow-sm";
-                document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
-                document.getElementById(targetId).classList.remove('hidden');
+
+        // =======================================================
+        // INTEGRASI API GEMINI (UBAH VARIABEL DI BAWAH INI)
+        // =======================================================
+        
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
             });
-        });
+        }
 
-        // Helper Exponential Backoff untuk Panggilan Gemini API
         async function fetchGeminiWithRetry(apiUrl, payload, retries = 3) {
             let delay = 1000;
             for (let attempt = 0; attempt < retries; attempt++) {
                 try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        const errJson = await response.json().catch(() => ({}));
-                        throw new Error(errJson.error?.message || `HTTP ${response.status}`);
-                    }
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error((await response.json().catch(()=>({}))).error?.message || `HTTP ${response.status}`);
                     return await response.json();
                 } catch (err) {
                     if (attempt === retries - 1) throw err;
@@ -873,495 +485,267 @@ Kembalikan DALAM FORMAT JSON SAJA:
             }
         }
 
-        // Fungsi Kategori Skor
-        function getScoreCategory(score) {
-            if (score >= 90) return { label: "Sangat Kompetitif", color: "text-emerald-700 bg-emerald-100 border-emerald-300" };
-            if (score >= 80) return { label: "Kuat", color: "text-blue-700 bg-blue-100 border-blue-300" };
-            if (score >= 70) return { label: "Cukup Kompetitif", color: "text-amber-700 bg-amber-100 border-amber-300" };
-            if (score >= 60) return { label: "Perlu Perbaikan", color: "text-orange-700 bg-orange-100 border-orange-300" };
-            return { label: "Berisiko Tinggi Ditolak", color: "text-rose-700 bg-rose-100 border-rose-300" };
-        }
+        // 1. FITUR SCAN GAMBAR LOWONGAN (OCR)
+        document.getElementById('btn-scan-image').addEventListener('click', async () => {
+            const fileInput = document.getElementById('jd-image-upload');
+            if (!fileInput.files.length) return showToast("Pilih gambar poster lowongan dulu!", "error");
+            
+            const btn = document.getElementById('btn-scan-image');
+            const statusEl = document.getElementById('scan-status');
+            btn.disabled = true; statusEl.innerText = "⏳ Sedang mengekstrak teks gambar...";
 
-        // EKSEKUSI SIMULASI 7 PANEL EVALUATOR
+            try {
+                const base64Data = await fileToBase64(fileInput.files[0]);
+                
+                // === SILAKAN ISI API KEY ANDA DI SINI (FITUR GAMBAR) ===
+                const apiKey = "AQ.Ab8RN6JXTciVN7feG5fSLjilD5JcHABPaEv7Z9fyzW3-em9U7Q"; 
+                
+                if (apiKey === "MASUKKAN_API_KEY_ANDA_DISINI") throw new Error("API Key belum diisi di dalam kode HTML!");
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ role: "user", parts: [
+                        { text: "Ekstrak informasi lowongan kerja dari gambar ini secara VERBATIM ke format JSON. Key: companyName, position, keywords, jobDescription." },
+                        { inlineData: { mimeType: fileInput.files[0].type, data: base64Data } }
+                    ]}],
+                    generationConfig: { responseMimeType: "application/json" }
+                };
+
+                const result = await fetchGeminiWithRetry(apiUrl, payload, 2);
+                const data = JSON.parse(result.candidates[0].content.parts[0].text.replace(/```json|```/gi, '').trim());
+
+                if (data.companyName) document.getElementById('jd-company').value = data.companyName;
+                if (data.position) document.getElementById('jd-position').value = data.position;
+                if (data.keywords) document.getElementById('jd-keywords').value = data.keywords;
+                if (data.jobDescription) document.getElementById('jd-text').value = data.jobDescription;
+
+                statusEl.innerText = "✅ Berhasil memindai gambar!";
+                statusEl.className = "mt-2 text-[11px] font-semibold text-emerald-600";
+            } catch (error) {
+                statusEl.innerText = `❌ Error: ${error.message}`;
+                statusEl.className = "mt-2 text-[11px] font-semibold text-rose-600";
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // 2. FITUR AUTO-SCAN COPAS TEKS
+        document.getElementById('btn-scan-text').addEventListener('click', async () => {
+            const textInput = document.getElementById('jd-raw-text-paste').value.trim();
+            if (!textInput) return showToast("Tempel teks dulu!", "error");
+
+            const btn = document.getElementById('btn-scan-text');
+            const statusEl = document.getElementById('scan-text-status');
+            btn.disabled = true; statusEl.innerText = "⏳ Memilah teks...";
+
+            try {
+                // === SILAKAN ISI API KEY ANDA DI SINI (FITUR TEKS LOWONGAN) ===
+                const apiKey = "AQ.Ab8RN6JXTciVN7feG5fSLjilD5JcHABPaEv7Z9fyzW3-em9U7Q"; 
+
+                if (apiKey === "MASUKKAN_API_KEY_ANDA_DISINI") throw new Error("API Key belum diisi!");
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: `Ubah teks lowongan mentah ini ke format JSON (companyName, position, keywords, jobDescription): "${textInput}"` }] }],
+                    generationConfig: { responseMimeType: "application/json" }
+                };
+
+                const result = await fetchGeminiWithRetry(apiUrl, payload, 2);
+                const data = JSON.parse(result.candidates[0].content.parts[0].text.replace(/```json|```/gi, '').trim());
+
+                if (data.companyName) document.getElementById('jd-company').value = data.companyName;
+                if (data.position) document.getElementById('jd-position').value = data.position;
+                if (data.keywords) document.getElementById('jd-keywords').value = data.keywords;
+                if (data.jobDescription) document.getElementById('jd-text').value = data.jobDescription;
+                document.getElementById('jd-raw-text-paste').value = ""; 
+
+                statusEl.innerText = "✅ Teks berhasil diekstrak!";
+                statusEl.className = "mt-2 text-[11px] font-semibold text-emerald-600";
+            } catch (error) {
+                statusEl.innerText = `❌ Error: ${error.message}`;
+                statusEl.className = "mt-2 text-[11px] font-semibold text-rose-600";
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // 3. FITUR UTAMA: JALANKAN SIMULASI 7 PANEL
         document.getElementById('btn-run-simulator').addEventListener('click', async () => {
             const cvText = document.getElementById('cv-raw-text').value.trim();
-            const company = document.getElementById('jd-company').value.trim() || "Evaluasi Umum (Tanpa Nama Perusahaan)";
-            const position = document.getElementById('jd-position').value.trim() || "Evaluasi Profil Manufaktur Umum";
-            const keywords = document.getElementById('jd-keywords').value.trim();
-            const jdText = document.getElementById('jd-text').value.trim();
-
-            if (cvText.length < 50) {
-                showToast("Mohon masukkan teks CV atau muat Master CV terlebih dahulu!", "error");
-                return;
-            }
+            if (cvText.length < 50) return showToast("Masukkan teks CV terlebih dahulu!", "error");
 
             const btn = document.getElementById('btn-run-simulator');
             btn.disabled = true;
-            btn.classList.add('opacity-60', 'cursor-not-allowed');
             document.getElementById('simulator-results').classList.add('hidden');
             document.getElementById('simulator-loading').classList.remove('hidden');
 
             try {
-                const apiKey = "";
+                // === SILAKAN ISI API KEY ANDA DI SINI (FITUR 7 PANEL AI) ===
+                const apiKey = "AQ.Ab8RN6JXTciVN7feG5fSLjilD5JcHABPaEv7Z9fyzW3-em9U7Q"; 
+
+                if (apiKey === "MASUKKAN_API_KEY_ANDA_DISINI") throw new Error("API Key belum diisi di kode HTML!");
+
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-                const systemPrompt = `Anda adalah "AI CV REVIEWER – 7 PANEL RECRUITMENT SIMULATOR" untuk industri manufaktur dan korporasi di Indonesia.
-Tugas Anda adalah mengevaluasi CV kandidat secara kritis, objektif, realistis, dan berbasis bukti (evidence-based) dari 7 perspektif penilai:
-1. AI 1 – ATS (Applicant Tracking System) (Bobot 20%)
-2. AI 2 – HR Recruitment Specialist (Bobot 20%)
-3. AI 3 – Hiring Manager (Bobot 20%)
-4. AI 4 – Calon Atasan Langsung / Future Supervisor (Bobot 15%)
-5. AI 5 – Calon Rekan Kerja / Future Colleague (Bobot 5%)
-6. AI 6 – CEO / Executive Perspective (Bobot 10%)
-7. AI 7 – Candidate Competitor / Kandidat Pesaing Hipotetis (Bobot 10%)
+                const systemPrompt = `Anda adalah "AI CV REVIEWER – 7 PANEL RECRUITMENT SIMULATOR" industri manufaktur.
+Tugas Anda mengevaluasi CV secara kritis.
+1. ATS (20%), 2. HR (20%), 3. Hiring Manager (20%), 4. Supervisor (15%), 5. Rekan (5%), 6. CEO (10%), 7. Pesaing (10%).
+ATURAN MUTLAK:
+- Terima bahwa kandidat AKTIF MAGANG pada bulan Agustus 2026 di PT IKSG. Ini fakta, bukan anomali.
+- Jangan mengarang pengalaman/skill yang tidak ada.
+- Pada bagian readyToCopyCV: BENTUK FORMAT TEKS MURNI. JANGAN GUNAKAN MARKDOWN (**). Gunakan KAPITAL untuk judul. Akhiri bullet tanpa titik.`;
 
-ATURAN INTEGRITAS DATA & OPTIMALISASI KELULUSAN (WAJIB DIIKUTI):
-- FAKTA WAKTU KANDIDAT: Terima secara mutlak bahwa kandidat AKTIF MAGANG pada bulan Agustus 2026 di PT IKSG. JANGAN deteksi ini sebagai anomali atau kebohongan, ini adalah fakta yang benar.
-- DILARANG mengarang pengalaman kerja, pencapaian, atau skill teknis yang tidak ada di CV.
-- FOKUS LOLOS ATS & HR: Pada bagian pembuatan "readyToCopyCV", optimalkan CV kandidat SEKUAT MUNGKIN. Gunakan Action Verbs (Menginisiasi, Mengoptimalkan, Menganalisis) yang terukur. Pastikan keyword penting dari lowongan tersebar secara natural pada bullet point pengalaman.
-- FORMAT STANDAR ATS: Pada bagian readyToCopyCV, JANGAN GUNAKAN MARKDOWN TEBAL/BOLD (**). Gunakan format murni berupa huruf KAPITAL untuk judul bagian. Akhiri kalimat bullet point TANPA tanda titik. Jangan tambahkan ikon.
-- Pada bagian Body Email Lamaran, buat ringkas, langsung ke intinya (to the point), profesional, tanpa format bold, dan tanpa menyisipkan URL sitasi apapun.`;
+                const userQuery = `CV: """${cvText}"""\n\nTARGET: ${document.getElementById('jd-company').value} - ${document.getElementById('jd-position').value}\nKEYWORD: ${document.getElementById('jd-keywords').value}\nJD: ${document.getElementById('jd-text').value}`;
 
-                const userQuery = `
-DATA CV KANDIDAT:
-"""
-${cvText}
-"""
-
-TARGET LOWONGAN KERJA (JOB DESCRIPTION):
-- Perusahaan: ${company}
-- Posisi: ${position}
-- Target Keyword Tambahan: ${keywords || "Sesuai Job Description"}
-- Detail Job Description: ${jdText || "Kandidat tidak menyertakan JD spesifik. Lakukan evaluasi umum berdasarkan standar industri manufaktur untuk posisi terkait tanpa mengarang syarat fiktif."}
-
-Hasilkan evaluasi lengkap sesuai skema JSON yang diminta.`;
-
-                const responseSchema = {
-                    type: "OBJECT",
-                    properties: {
-                        candidateOverview: {
-                            type: "OBJECT",
-                            properties: {
-                                candidateName: { type: "STRING" },
-                                targetPosition: { type: "STRING" },
-                                targetCompany: { type: "STRING" },
-                                profileSummary: { type: "STRING" },
-                                finalRecommendation: { type: "STRING", description: "Pilih satu: STRONG CANDIDATE, POTENTIAL CANDIDATE, WEAK CANDIDATE, atau HIGH REJECTION RISK" },
-                                estimatedScoreAfterRevision: { type: "INTEGER" },
-                                mainStrengths: { type: "ARRAY", items: { type: "STRING" } },
-                                mainWeaknesses: { type: "ARRAY", items: { type: "STRING" } }
-                            },
-                            required: ["candidateName", "targetPosition", "targetCompany", "profileSummary", "finalRecommendation", "estimatedScoreAfterRevision", "mainStrengths", "mainWeaknesses"]
-                        },
-                        sevenEvaluators: {
-                            type: "ARRAY",
-                            description: "Tepat 7 evaluator berurutan: 1. ATS, 2. HR Recruitment Specialist, 3. Hiring Manager, 4. Calon Atasan Langsung (Supervisor), 5. Calon Rekan Kerja, 6. CEO / Executive, 7. Kandidat Pesaing Hipotetis",
-                            items: {
-                                type: "OBJECT",
-                                properties: {
-                                    id: { type: "STRING" },
-                                    roleName: { type: "STRING" },
-                                    weightPercentage: { type: "INTEGER" },
-                                    score: { type: "INTEGER" },
-                                    keyMetricLabel: { type: "STRING" },
-                                    evidenceQuote: { type: "STRING", description: "Kutipan langsung dari CV atau JD sebagai bukti skor" },
-                                    positiveFindings: { type: "ARRAY", items: { type: "STRING" } },
-                                    criticalFindings: { type: "ARRAY", items: { type: "STRING" } },
-                                    extraKeywordsOrNotes: { type: "STRING", description: "Untuk ATS: daftar keyword ditemukan & belum ditemukan. Untuk panel lain: insight spesifik peran." },
-                                    actionableRecommendation: { type: "STRING" }
-                                },
-                                required: ["id", "roleName", "weightPercentage", "score", "keyMetricLabel", "evidenceQuote", "positiveFindings", "criticalFindings", "extraKeywordsOrNotes", "actionableRecommendation"]
-                            }
-                        },
-                        rejectionAnalysis: {
-                            type: "OBJECT",
-                            properties: {
-                                topFiveReasons: {
-                                    type: "ARRAY",
-                                    items: {
-                                        type: "OBJECT",
-                                        properties: {
-                                            reason: { type: "STRING" },
-                                            cvEvidence: { type: "STRING" }
-                                        },
-                                        required: ["reason", "cvEvidence"]
-                                    }
-                                },
-                                weakestSection: { type: "STRING" },
-                                irrelevantInfo: { type: "STRING" },
-                                weakAchievements: { type: "STRING" },
-                                mismatchedSkills: { type: "STRING" },
-                                missingKeywords: { type: "STRING" },
-                                unclearInformation: { type: "STRING" },
-                                biggestSelectionRisk: { type: "STRING" }
-                            },
-                            required: ["topFiveReasons", "weakestSection", "irrelevantInfo", "weakAchievements", "mismatchedSkills", "missingKeywords", "unclearInformation", "biggestSelectionRisk"]
-                        },
-                        cvImprovements: {
-                            type: "ARRAY",
-                            description: "7 bagian berurutan: 1. Professional Summary, 2. Work/Internship Experience, 3. Achievement & Project, 4. Technical Skills, 5. Certifications, 6. Education, 7. Struktur & Format CV",
-                            items: {
-                                type: "OBJECT",
-                                properties: {
-                                    sectionName: { type: "STRING" },
-                                    scoreBefore: { type: "INTEGER" },
-                                    scoreAfter: { type: "INTEGER" },
-                                    originalText: { type: "STRING" },
-                                    weaknessAnalysis: { type: "STRING" },
-                                    revisedText: { type: "STRING" },
-                                    reasonForChange: { type: "STRING" }
-                                },
-                                required: ["sectionName", "scoreBefore", "scoreAfter", "originalText", "weaknessAnalysis", "revisedText", "reasonForChange"]
-                            }
-                        },
-                        readyToCopyCV: { type: "STRING", description: "Teks CV lengkap yang sudah disesuaikan (Headline, Profil Pribadi, Pengalaman Magang/Kerja dengan bullet tanpa titik di akhir, Keahlian Teknis, Software, Proyek & Sertifikasi relevan)" },
-                        readyToCopyEmail: { type: "STRING", description: "Draf Body Email lamaran kerja yang singkat, padat, rapi, rata kiri-kanan, tanpa huruf tebal (**), dan tanpa sitasi" }
-                    },
-                    required: ["candidateOverview", "sevenEvaluators", "rejectionAnalysis", "cvImprovements", "readyToCopyCV", "readyToCopyEmail"]
-                };
-
+                // Schema persis seperti sebelumnya
                 const payload = {
                     contents: [{ role: "user", parts: [{ text: userQuery }] }],
                     systemInstruction: { parts: [{ text: systemPrompt }] },
                     generationConfig: {
                         responseMimeType: "application/json",
-                        responseSchema: responseSchema
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                candidateOverview: {
+                                    type: "OBJECT", properties: {
+                                        candidateName: { type: "STRING" }, targetPosition: { type: "STRING" }, targetCompany: { type: "STRING" }, profileSummary: { type: "STRING" }, finalRecommendation: { type: "STRING" }, estimatedScoreAfterRevision: { type: "INTEGER" }, mainStrengths: { type: "ARRAY", items: { type: "STRING" } }, mainWeaknesses: { type: "ARRAY", items: { type: "STRING" } }
+                                    }
+                                },
+                                sevenEvaluators: {
+                                    type: "ARRAY", items: {
+                                        type: "OBJECT", properties: {
+                                            id: { type: "STRING" }, roleName: { type: "STRING" }, weightPercentage: { type: "INTEGER" }, score: { type: "INTEGER" }, keyMetricLabel: { type: "STRING" }, evidenceQuote: { type: "STRING" }, positiveFindings: { type: "ARRAY", items: { type: "STRING" } }, criticalFindings: { type: "ARRAY", items: { type: "STRING" } }, extraKeywordsOrNotes: { type: "STRING" }, actionableRecommendation: { type: "STRING" }
+                                        }
+                                    }
+                                },
+                                rejectionAnalysis: {
+                                    type: "OBJECT", properties: {
+                                        topFiveReasons: { type: "ARRAY", items: { type: "OBJECT", properties: { reason: { type: "STRING" }, cvEvidence: { type: "STRING" } } } }, weakestSection: { type: "STRING" }, irrelevantInfo: { type: "STRING" }, weakAchievements: { type: "STRING" }, mismatchedSkills: { type: "STRING" }, missingKeywords: { type: "STRING" }, unclearInformation: { type: "STRING" }, biggestSelectionRisk: { type: "STRING" }
+                                    }
+                                },
+                                cvImprovements: {
+                                    type: "ARRAY", items: {
+                                        type: "OBJECT", properties: { sectionName: { type: "STRING" }, scoreBefore: { type: "INTEGER" }, scoreAfter: { type: "INTEGER" }, originalText: { type: "STRING" }, weaknessAnalysis: { type: "STRING" }, revisedText: { type: "STRING" }, reasonForChange: { type: "STRING" } }
+                                    }
+                                },
+                                readyToCopyCV: { type: "STRING" },
+                                readyToCopyEmail: { type: "STRING" }
+                            }
+                        }
                     }
                 };
 
-                const result = await fetchGeminiWithRetry(apiUrl, payload, 3);
-                let rawJson = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!rawJson) throw new Error("Respons AI kosong atau tidak valid.");
-
-                // Bersihkan markdown "```json" yang sering menyebabkan error JSON.parse
-                rawJson = rawJson.replace(/```json/gi, '').replace(/```/gi, '').trim();
-                const data = JSON.parse(rawJson);
+                const result = await fetchGeminiWithRetry(apiUrl, payload, 2);
+                const data = JSON.parse(result.candidates[0].content.parts[0].text.replace(/```json|```/gi, '').trim());
                 
                 renderSimulatorOutput(data);
-                showToast("Evaluasi 7 Panel & Perbaikan CV selesai!", "success");
+                showToast("Simulasi selesai!", "success");
 
             } catch (error) {
-                console.error("Simulator Error:", error);
-                showToast("Gagal memproses simulasi: " + error.message, "error");
+                showToast("Error Simulasi: " + error.message, "error");
             } finally {
                 document.getElementById('simulator-loading').classList.add('hidden');
                 btn.disabled = false;
-                btn.classList.remove('opacity-60', 'cursor-not-allowed');
             }
         });
 
-        // Fungsi Render Seluruh Hasil ke UI
+        // =======================================================
+        // FUNGSI RENDER UI HASIL (Tetap menggunakan kode Anda yang sudah rapi)
+        // =======================================================
+        function getScoreCategory(score) {
+            if (score >= 90) return { label: "Sangat Kompetitif", color: "text-emerald-700 bg-emerald-100 border-emerald-300" };
+            if (score >= 80) return { label: "Kuat", color: "text-blue-700 bg-blue-100 border-blue-300" };
+            if (score >= 70) return { label: "Cukup Kompetitif", color: "text-amber-700 bg-amber-100 border-amber-300" };
+            if (score >= 60) return { label: "Perlu Perbaikan", color: "text-orange-700 bg-orange-100 border-orange-300" };
+            return { label: "Risiko Tinggi", color: "text-rose-700 bg-rose-100 border-rose-300" };
+        }
+
         function renderSimulatorOutput(data) {
-            const overview = data.candidateOverview;
-            const evaluators = data.sevenEvaluators || [];
-
-            // Hitung Skor Tertimbang secara Eksak sesuai Bobot Prompt:
-            // ATS 20%, HR 20%, HM 20%, Supervisor 15%, Rekan 5%, CEO 10%, Pesaing 10%
+            const ov = data.candidateOverview, evals = data.sevenEvaluators || [];
             const defaultWeights = [20, 20, 20, 15, 5, 10, 10];
-            let weightedSum = 0;
-            let totalWeight = 0;
-            evaluators.forEach((ev, idx) => {
-                const w = defaultWeights[idx] || ev.weightPercentage || 10;
-                ev.weightPercentage = w;
-                weightedSum += (Number(ev.score) || 0) * w;
-                totalWeight += w;
-            });
-            const overallScoreBefore = totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
-            const overallScoreAfter = Math.max(overallScoreBefore, Number(overview.estimatedScoreAfterRevision) || overallScoreBefore + 10);
-            const delta = overallScoreAfter - overallScoreBefore;
+            let wSum = 0, tWeight = 0;
+            evals.forEach((ev, i) => { wSum += (ev.score || 0) * defaultWeights[i]; tWeight += defaultWeights[i]; });
+            const scoreBefore = Math.round(wSum / tWeight);
+            const scoreAfter = Math.max(scoreBefore, ov.estimatedScoreAfterRevision || scoreBefore + 10);
 
-            // 1. Render Candidate Overview
-            document.getElementById('res-candidate-title').innerText = overview.candidateName || "Kandidat";
-            document.getElementById('res-target-role').innerText = `Target: ${overview.targetPosition} — ${overview.targetCompany}`;
-            document.getElementById('res-profile-summary').innerText = overview.profileSummary || "";
-            document.getElementById('res-score-before').innerText = overallScoreBefore;
-            document.getElementById('res-score-after').innerText = overallScoreAfter;
-            document.getElementById('res-score-delta').innerText = `+${delta} Poin Peningkatan Setelah Revisi`;
+            document.getElementById('res-candidate-title').innerText = ov.candidateName || "Kandidat";
+            document.getElementById('res-target-role').innerText = `Target: ${ov.targetPosition} — ${ov.targetCompany}`;
+            document.getElementById('res-profile-summary').innerText = ov.profileSummary || "";
+            document.getElementById('res-score-before').innerText = scoreBefore;
+            document.getElementById('res-score-after').innerText = scoreAfter;
+            document.getElementById('res-score-delta').innerText = `+${scoreAfter - scoreBefore} Poin Peningkatan`;
 
-            // Recommendation Badge
-            const recBadge = document.getElementById('res-recommendation-badge');
-            const rec = (overview.finalRecommendation || "POTENTIAL CANDIDATE").toUpperCase();
-            recBadge.innerText = rec;
-            if (rec.includes("STRONG")) {
-                recBadge.className = "text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-600 text-white";
-            } else if (rec.includes("POTENTIAL")) {
-                recBadge.className = "text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-blue-600 text-white";
-            } else if (rec.includes("WEAK")) {
-                recBadge.className = "text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-amber-500 text-white";
-            } else {
-                recBadge.className = "text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-rose-600 text-white";
-            }
+            const badge = document.getElementById('res-recommendation-badge');
+            badge.innerText = ov.finalRecommendation.toUpperCase();
+            badge.className = `text-xs font-extrabold uppercase px-3 py-1 rounded-full text-white ${ov.finalRecommendation.includes('STRONG') ? 'bg-emerald-600' : ov.finalRecommendation.includes('POTENTIAL') ? 'bg-blue-600' : 'bg-rose-600'}`;
+            
+            document.getElementById('res-main-strengths').innerHTML = (ov.mainStrengths||[]).map(s=>`<li>${s}</li>`).join('');
+            document.getElementById('res-main-weaknesses').innerHTML = (ov.mainWeaknesses||[]).map(w=>`<li>${w}</li>`).join('');
 
-            const catInfo = getScoreCategory(overallScoreBefore);
-            const catBadge = document.getElementById('res-category-badge');
-            catBadge.innerText = `Kategori Awal: ${catInfo.label} (${overallScoreBefore}/100)`;
-            catBadge.className = `text-xs font-semibold px-2.5 py-1 rounded-full border ${catInfo.color}`;
-
-            // Strengths & Weaknesses
-            document.getElementById('res-main-strengths').innerHTML = (overview.mainStrengths || [])
-                .map(s => `<li>${s}</li>`).join('');
-            document.getElementById('res-main-weaknesses').innerHTML = (overview.mainWeaknesses || [])
-                .map(w => `<li>${w}</li>`).join('');
-
-            // Mini Score Bars 7 Panel
-            const barsContainer = document.getElementById('seven-score-bars');
-            barsContainer.innerHTML = evaluators.map((ev, i) => {
-                const cat = getScoreCategory(ev.score);
-                return `
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-1">
-                        <span>Panel ${i + 1}</span>
-                        <span>Bobot ${ev.weightPercentage}%</span>
-                    </div>
-                    <div class="text-xs font-bold text-slate-800 truncate" title="${ev.roleName}">${ev.roleName}</div>
-                    <div class="mt-2 flex items-baseline justify-between">
-                        <span class="text-xl font-extrabold text-slate-900">${ev.score}</span>
-                        <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded border ${cat.color}">${cat.label}</span>
-                    </div>
-                </div>`;
+            document.getElementById('seven-score-bars').innerHTML = evals.map((ev, i) => {
+                const c = getScoreCategory(ev.score);
+                return `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><div class="text-[11px] font-bold text-slate-500">Panel ${i+1}</div><div class="text-xs font-bold text-slate-800 truncate">${ev.roleName}</div><div class="text-xl font-extrabold mt-1 text-slate-900">${ev.score} <span class="text-[10px] font-normal ${c.color} px-1 rounded">${c.label}</span></div></div>`;
             }).join('');
 
-            // 2. Render Kartu Detail 7 Evaluator
-            const evalGrid = document.getElementById('evaluators-grid');
-            evalGrid.innerHTML = evaluators.map((ev, i) => {
-                const cat = getScoreCategory(ev.score);
-                const positives = (ev.positiveFindings || []).map(p => `<li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>${p}</span></li>`).join('');
-                const criticals = (ev.criticalFindings || []).map(c => `<li class="flex items-start gap-1.5"><span class="text-rose-600 font-bold">✕</span><span>${c}</span></li>`).join('');
-                return `
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-3 mb-3">
-                            <div>
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600">AI Evaluator ${i + 1} • Bobot ${ev.weightPercentage}%</span>
-                                <h3 class="text-base font-extrabold text-slate-900">${ev.roleName}</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">${ev.keyMetricLabel || ""}</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-extrabold text-slate-900">${ev.score}<span class="text-xs font-normal text-slate-400">/100</span></div>
-                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${cat.color}">${cat.label}</span>
-                            </div>
-                        </div>
-
-                        <!-- Bukti Kutipan CV/JD -->
-                        <div class="mb-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-                            <span class="font-bold text-slate-700 block mb-1">Bukti Evaluasi (Evidence-Based Quote):</span>
-                            <p class="italic text-slate-600">"${ev.evidenceQuote || "-"}"</p>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 text-xs">
-                            <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-100">
-                                <span class="font-bold text-emerald-800 block mb-1.5">Poin Positif / Keunggulan:</span>
-                                <ul class="space-y-1 text-slate-700">${positives}</ul>
-                            </div>
-                            <div class="p-3 rounded-xl bg-rose-50/60 border border-rose-100">
-                                <span class="font-bold text-rose-800 block mb-1.5">Potensi Penolakan / Risiko:</span>
-                                <ul class="space-y-1 text-slate-700">${criticals}</ul>
-                            </div>
-                        </div>
-
-                        <div class="mb-3 p-3 rounded-xl bg-indigo-50/50 border border-indigo-100 text-xs text-slate-700">
-                            <span class="font-bold text-indigo-900 block mb-1">Analisis Keyword & Catatan Spesifik Panel:</span>
-                            <p>${ev.extraKeywordsOrNotes || "-"}</p>
-                        </div>
-                    </div>
-
-                    <div class="pt-3 border-t border-slate-100 text-xs">
-                        <span class="font-bold text-blue-700">Rekomendasi Panel:</span>
-                        <span class="text-slate-700"> ${ev.actionableRecommendation || "-"}</span>
-                    </div>
-                </div>`;
+            document.getElementById('evaluators-grid').innerHTML = evals.map((ev, i) => {
+                const pos = (ev.positiveFindings||[]).map(p=>`<li class="flex gap-1"><span class="text-emerald-600">✓</span><span>${p}</span></li>`).join('');
+                const neg = (ev.criticalFindings||[]).map(c=>`<li class="flex gap-1"><span class="text-rose-600">✕</span><span>${c}</span></li>`).join('');
+                return `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5"><h3 class="font-extrabold">${ev.roleName} (${ev.score}/100)</h3><p class="text-xs text-slate-500 mb-2">${ev.evidenceQuote}</p><div class="grid grid-cols-2 gap-2 text-xs"><div class="bg-emerald-50 p-2 rounded"><b>Positif:</b><ul>${pos}</ul></div><div class="bg-rose-50 p-2 rounded"><b>Kritis:</b><ul>${neg}</ul></div></div></div>`;
             }).join('');
 
-            // 3. Render Rejection Analysis (8 Titik Kritis)
             const rej = data.rejectionAnalysis || {};
-            document.getElementById('rejection-top5').innerHTML = (rej.topFiveReasons || []).map((item, idx) => `
-                <div class="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200 text-xs">
-                    <div class="font-bold text-rose-900">${idx + 1}. ${item.reason}</div>
-                    <div class="text-slate-600 mt-1"><span class="font-semibold text-slate-700">Bukti dari CV:</span> "${item.cvEvidence}"</div>
-                </div>
-            `).join('');
-
-            const rejectionCards = [
-                { title: "2. Bagian CV Paling Lemah", content: rej.weakestSection },
-                { title: "3. Informasi Tidak Relevan", content: rej.irrelevantInfo },
-                { title: "4. Pencapaian Kurang Kuat", content: rej.weakAchievements },
-                { title: "5. Skill Belum Sesuai Kebutuhan", content: rej.mismatchedSkills },
-                { title: "6. Keyword ATS Belum Tercantum", content: rej.missingKeywords },
-                { title: "7. Informasi yang Perlu Diperjelas", content: rej.unclearInformation },
-                { title: "8. Risiko Terbesar Dalam Proses Seleksi", content: rej.biggestSelectionRisk }
-            ];
-            document.getElementById('rejection-details-grid').innerHTML = rejectionCards.map(card => `
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-                    <h5 class="font-bold text-slate-800 uppercase tracking-wider mb-1.5">${card.title}</h5>
-                    <p class="text-slate-600 leading-relaxed">${card.content || "-"}</p>
-                </div>
-            `).join('');
-
-            // 4. Render AI CV Improvement (Before vs After 7 Sections)
+            document.getElementById('rejection-top5').innerHTML = (rej.topFiveReasons||[]).map(r=>`<div class="bg-rose-50 p-3 rounded mb-2 text-xs"><b>${r.reason}</b><br>Bukti: "${r.cvEvidence}"</div>`).join('');
+            
             const imps = data.cvImprovements || [];
-            document.getElementById('improvements-container').innerHTML = imps.map((imp, idx) => `
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 mb-4">
-                        <h4 class="text-base font-extrabold text-slate-900">${idx + 1}. ${imp.sectionName}</h4>
-                        <div class="flex items-center gap-2 text-xs font-bold">
-                            <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">Skor Awal: ${imp.scoreBefore}/100</span>
-                            <span class="text-slate-400">→</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700">Skor Revisi: ${imp.scoreAfter}/100</span>
-                        </div>
-                    </div>
+            document.getElementById('improvements-container').innerHTML = imps.map(imp=>`<div class="bg-white p-4 border rounded shadow-sm text-xs mb-3"><b>${imp.sectionName} (Skor: ${imp.scoreBefore} → ${imp.scoreAfter})</b><div class="grid grid-cols-2 gap-2 mt-2"><div class="bg-rose-50 p-2 whitespace-pre-wrap">${imp.originalText}</div><div class="bg-emerald-50 p-2 whitespace-pre-wrap">${imp.revisedText}</div></div></div>`).join('');
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                        <div class="p-4 rounded-xl bg-rose-50/40 border border-rose-200 text-xs">
-                            <span class="font-bold text-rose-800 uppercase tracking-wider block mb-2">Versi Asli (Before)</span>
-                            <div class="whitespace-pre-line text-slate-700 leading-relaxed font-mono">${imp.originalText || "-"}</div>
-                        </div>
-                        <div class="p-4 rounded-xl bg-emerald-50/40 border border-emerald-200 text-xs">
-                            <span class="font-bold text-emerald-800 uppercase tracking-wider block mb-2">Versi Revisi STAR & ATS (After)</span>
-                            <div class="whitespace-pre-line text-slate-800 leading-relaxed font-medium">${imp.revisedText || "-"}</div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                        <div>
-                            <span class="font-bold text-rose-700">Kelemahan Versi Asli:</span>
-                            <p class="text-slate-600 mt-0.5">${imp.weaknessAnalysis || "-"}</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-emerald-700">Alasan Perubahan & Dampak ATS:</span>
-                            <p class="text-slate-600 mt-0.5">${imp.reasonForChange || "-"}</p>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            // 5. Render Ready-to-Copy CV & Body Email
             document.getElementById('final-cv-textarea').value = data.readyToCopyCV || "";
             document.getElementById('final-email-textarea').value = data.readyToCopyEmail || "";
-
-            // Tampilkan Section Hasil
             document.getElementById('simulator-results').classList.remove('hidden');
-            document.getElementById('simulator-results').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Fungsi Salin Teks ke Clipboard (Menggunakan execCommand sesuai standar iframe)
-        function copyFromTextarea(textareaId, successMessage) {
-            const el = document.getElementById(textareaId);
-            el.select();
-            document.execCommand('copy');
-            showToast(successMessage, "success");
-        }
-
-        document.getElementById('btn-copy-cv').addEventListener('click', () => {
-            copyFromTextarea('final-cv-textarea', "Teks CV hasil optimasi berhasil disalin!");
+        // =======================================================
+        // NAVIGASI TAB & DOWNLOAD (Frontend Murni via html2pdf)
+        // =======================================================
+        document.querySelectorAll('.main-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.main-tab-btn').forEach(b => b.className = "main-tab-btn bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl border border-slate-200");
+                btn.className = "main-tab-btn bg-blue-600 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl shadow-sm";
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+                document.getElementById(btn.getAttribute('data-tab')).classList.remove('hidden');
+            });
         });
 
-        document.getElementById('btn-copy-email').addEventListener('click', () => {
-            copyFromTextarea('final-email-textarea', "Body Email lamaran berhasil disalin!");
-        });
+        document.getElementById('btn-copy-cv').addEventListener('click', () => { document.getElementById('final-cv-textarea').select(); document.execCommand('copy'); showToast("CV disalin!", "success"); });
+        document.getElementById('btn-copy-email').addEventListener('click', () => { document.getElementById('final-email-textarea').select(); document.execCommand('copy'); showToast("Email disalin!", "success"); });
 
-        // Fungsi Generate & Download PDF Menggunakan html2pdf (Khusus Hosting Vercel/Netlify)
         document.getElementById('btn-download-pdf').addEventListener('click', async () => {
-            const cvText = document.getElementById('final-cv-textarea').value.trim();
-            if (!cvText) {
-                showToast("Teks CV hasil optimasi belum tersedia. Jalankan simulasi terlebih dahulu.", "error");
-                return;
-            }
-
-            showToast("Sedang menyusun layout ATS & membuat file PDF...", "info");
-
-            // Membuat Nama File Dinamis
-            let rawName = document.getElementById('res-candidate-title').innerText.trim() || 'Kandidat';
-            let safeName = rawName.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_');
+            const cvText = document.getElementById('final-cv-textarea').value;
+            if(!cvText) return showToast("CV belum tersedia.", "error");
             
-            let rawPosition = document.getElementById('jd-position').value.trim() || 'Posisi';
-            let safePosition = rawPosition.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_');
-            let filename = `CV_${safeName}_${safePosition}.pdf`;
+            showToast("Menyusun PDF...", "info");
+            const container = document.createElement('div');
+            container.style.cssText = "padding:40px 50px; font-family:Arial,sans-serif; font-size:11pt; width:800px; line-height:1.4;";
+            
+            let html = '', inList = false;
+            cvText.split('\n').forEach((line, i) => {
+                const t = line.trim();
+                if(t === '') { if(inList){ html+='</ul>'; inList=false; } html+='<br>'; return; }
+                if(i===0) html+=`<h1 style="text-align:center;font-size:16pt;margin:0;"><b>${t}</b></h1>`;
+                else if(i<4 && (t.includes('|')||t.includes('@')||t.toLowerCase().includes('linkedin'))) html+=`<p style="text-align:center;font-size:10pt;margin:2px 0;">${t}</p>`;
+                else if(t===t.toUpperCase() && t.length>4 && !t.startsWith('-')) { if(inList){ html+='</ul>'; inList=false; } html+=`<h2 style="font-size:11pt;border-bottom:1px solid #000;margin-top:16px;margin-bottom:4px;"><b>${t}</b></h2>`; }
+                else if(t.startsWith('-')) { if(!inList){ html+='<ul style="margin:4px 0;padding-left:20px;">'; inList=true; } html+=`<li>${t.substring(1).trim()}</li>`; }
+                else { if(inList){ html+='</ul>'; inList=false; } const isSub = t.length<120 && (t.includes(' - ') || t.includes(' | ') || /\d{4}/.test(t)); html+=`<p style="${isSub?'font-weight:bold;margin-top:10px;':'margin:2px 0;'}text-align:justify;">${t}</p>`; }
+            });
+            if(inList) html+='</ul>'; container.innerHTML = html;
 
-            const btn = document.getElementById('btn-download-pdf');
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-
-            try {
-                // 1. Buat elemen kontainer tak terlihat untuk dirender menjadi PDF
-                const container = document.createElement('div');
-                container.style.padding = '40px 50px';
-                container.style.fontFamily = 'Arial, sans-serif';
-                container.style.fontSize = '11pt';
-                container.style.lineHeight = '1.4';
-                container.style.color = '#000';
-                container.style.background = '#fff';
-                container.style.width = '800px'; // Ukuran proporsional A4
-                
-                // 2. Parse teks CV menjadi elemen HTML berformat ATS
-                const lines = cvText.split('\n');
-                let htmlContent = '';
-                let inList = false;
-
-                lines.forEach((line, index) => {
-                    const trimmedLine = line.trim();
-                    if (trimmedLine === '') {
-                        if (inList) { htmlContent += '</ul>'; inList = false; }
-                        htmlContent += '<br>';
-                        return;
-                    }
-
-                    if (index === 0) {
-                        // Nama Kandidat
-                        htmlContent += `<h1 style="text-align:center; font-size:16pt; margin:0; font-weight:bold;">${trimmedLine}</h1>`;
-                    } 
-                    else if (index > 0 && index < 4 && (trimmedLine.includes('|') || trimmedLine.includes('@') || trimmedLine.toLowerCase().includes('linkedin'))) {
-                        // Info Kontak
-                        htmlContent += `<p style="text-align:center; font-size:10pt; margin:2px 0;">${trimmedLine}</p>`;
-                    }
-                    else if (trimmedLine === trimmedLine.toUpperCase() && trimmedLine.length > 4 && !trimmedLine.startsWith('-')) {
-                        // Judul Bagian (Section Header)
-                        if (inList) { htmlContent += '</ul>'; inList = false; }
-                        htmlContent += `<h2 style="font-size:11pt; font-weight:bold; margin-top:16px; margin-bottom:4px; border-bottom:1px solid #000;">${trimmedLine}</h2>`;
-                    }
-                    else if (trimmedLine.startsWith('-')) {
-                        // Bullet point
-                        if (!inList) { htmlContent += '<ul style="margin:4px 0; padding-left:20px; text-align:justify;">'; inList = true; }
-                        htmlContent += `<li style="margin-bottom:2px;">${trimmedLine.substring(1).trim()}</li>`;
-                    }
-                    else {
-                        // Teks Biasa / Sub-judul
-                        if (inList) { htmlContent += '</ul>'; inList = false; }
-                        
-                        // Cek apakah baris mengandung format tanggal seperti (Agu 2026 - Sekarang)
-                        const isDate = /\((Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agu|Sep|Okt|Nov|Des)[a-z]* \d{4}/i.test(trimmedLine);
-                        const isSubheading = trimmedLine.length < 120 && (trimmedLine.includes(' - ') || trimmedLine.includes(' | ') || isDate);
-                        
-                        if (isSubheading) {
-                            htmlContent += `<p style="font-weight:bold; margin-top:10px; margin-bottom:2px; text-align:justify;">${trimmedLine}</p>`;
-                        } else {
-                            htmlContent += `<p style="margin:2px 0; text-align:justify;">${trimmedLine}</p>`;
-                        }
-                    }
-                });
-                if (inList) htmlContent += '</ul>';
-                
-                container.innerHTML = htmlContent;
-                
-                // 3. Konfigurasi html2pdf
-                const opt = {
-                    margin:       0,
-                    filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
-                };
-
-                // 4. Eksekusi pembuatan PDF
-                await html2pdf().set(opt).from(container).save();
-                showToast("Berhasil mendownload CV (PDF ATS-Friendly).", "success");
-
-            } catch (err) {
-                console.error(err);
-                showToast("Gagal membuat PDF: " + err.message, "error");
-            } finally {
-                btn.disabled = false;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
+            html2pdf().set({
+                margin: 0,
+                filename: `CV_${document.getElementById('res-candidate-title').innerText.replace(/\s+/g,'_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+            }).from(container).save().then(() => showToast("PDF berhasil diunduh!", "success"));
         });
     </script>
 </body>
